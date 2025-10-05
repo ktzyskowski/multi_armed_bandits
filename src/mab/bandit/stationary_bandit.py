@@ -10,18 +10,22 @@ class MultiArmedBandit:
         self,
         k: int = 10,
         random_seed: Optional[int] = None,
-        mean: float = 0.0,
+        reward_shift: float = 0.0,
     ) -> None:
         """Create a new multi-armed bandit.
 
         Args:
             k (int, optional): number of bandit arms.
             random_seed (int, optional): random seed for reproducibility.
-            mean (float, optional): shift parameter for true rewards.
+            reward_shift (float, optional): shift parameter for true rewards.
         """
         self._rng = np.random.default_rng(seed=random_seed)
         # sample true value q*(a) for each action: N(mean, 1)
-        self._q = np.array([self._rng.normal(mean, 1.0) for _ in range(k)])
+        self._q = np.array([self._rng.normal(reward_shift, 1.0) for _ in range(k)])
+
+    def optimal_action(self) -> int:
+        """Return the optimal action."""
+        return np.argmax(self._q)
 
     def step(self, action: int) -> float:
         """Sample a reward from the multi-armed bandit.

@@ -1,0 +1,53 @@
+{
+    "n_arms": 10,
+    "n_runs": 2000,
+    "n_steps": 1000,
+    "experiments": [
+        {
+            "name": "Gradient w/ Baseline (alpha=0.1)",
+            "type": "gradient",
+            "stationary": true,
+            "args": {
+                "alpha": 0.1
+            },
+            "bandit_args": {
+                "reward_shift": 4
+            }
+        },
+        {
+            "name": "Gradient w/ Baseline (alpha=0.4)",
+            "type": "gradient",
+            "stationary": true,
+            "args": {
+                "alpha": 0.4
+            },
+            "bandit_args": {
+                "reward_shift": 4
+            }
+        },
+        {
+            "name": "Gradient w/ No Baseline (alpha=0.1)",
+            "type": "gradient",
+            "stationary": true,
+            "args": {
+                "alpha": 0.1,
+                "baseline": false
+            },
+            "bandit_args": {
+                "reward_shift": 4
+            }
+        },
+        {
+            "name": "Gradient w/ No Baseline (alpha=0.4)",
+            "type": "gradient",
+            "stationary": true,
+            "args": {
+                "alpha": 0.4,
+                "baseline": false
+            },
+            "bandit_args": {
+                "reward_shift": 4
+            }
+        }
+    ]
+}

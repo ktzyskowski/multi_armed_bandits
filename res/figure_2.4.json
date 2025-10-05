@@ -1,0 +1,23 @@
+{
+    "n_arms": 10,
+    "n_runs": 2000,
+    "n_steps": 1000,
+    "experiments": [
+        {
+            "name": "Epsilon Greedy (eps=0.1)",
+            "type": "eps_greedy",
+            "stationary": true,
+            "args": {
+                "eps": 0.1
+            }
+        },
+        {
+            "name": "Upper Confidence Bound (c=2)",
+            "type": "ucb",
+            "stationary": true,
+            "args": {
+                "c": 2.0
+            }
+        }
+    ]
+}

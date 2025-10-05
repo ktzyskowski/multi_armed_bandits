@@ -5,9 +5,10 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
+    "click>=8.3.0",
     "numpy>=2.3.3",
-    "plotly>=4.0.0",
-    "tqdm>=4.67.1",
+ "plotly>=4.0.0",
+ "tqdm>=4.67.1",
 ]
 
 [dependency-groups]

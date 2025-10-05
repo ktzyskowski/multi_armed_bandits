@@ -17,6 +17,7 @@ class TestbedConfig(TypedDict):
     type: str
     stationary: bool
     args: Optional[dict[str, any]]
+    bandit_args: Optional[dict[str, any]]
 
 
 class Testbed:
@@ -55,13 +56,27 @@ class Testbed:
         config: TestbedConfig,
         random_seed: int = None,
     ) -> MultiArmedBandit:
+        bandit_args = config.get("bandit_args") or dict()
         if config.get("stationary"):
-            return MultiArmedBandit(k=self._k, random_seed=random_seed)
+            return MultiArmedBandit(
+                k=self._k,
+                random_seed=random_seed,
+                **bandit_args,
+            )
         else:
-            return NonstationaryMultiArmedBandit(k=self._k, random_seed=random_seed)
+            return NonstationaryMultiArmedBandit(
+                k=self._k,
+                random_seed=random_seed,
+                **bandit_args,
+            )
 
-    def run(self, config: TestbedConfig, verbose: bool = False):
+    def run(
+        self,
+        config: TestbedConfig,
+        verbose: bool = False,
+    ) -> dict[str, np.ndarray]:
         rewards = np.zeros((self._n_runs, self._n_steps), dtype=np.float32)
+        was_optimal = np.zeros((self._n_runs, self._n_steps), dtype=np.float32)
 
         iterator = (
             tqdm.trange(self._n_runs, desc=f"Simulating bandit runs...")
@@ -76,7 +91,14 @@ class Testbed:
             bandit = self.bandit_factory(config, random_seed=bandit_random_seed)
             for step_idx in range(self._n_steps):
                 action = policy()
+                # log if selected action is optimal
+                was_optimal[run_idx, step_idx] = action == bandit.optimal_action()
+
+                # take action, collect and log reward
                 reward = bandit.step(action)
-                policy.update(action, reward)
                 rewards[run_idx, step_idx] = reward
-        return rewards
+
+                # update policy after observing (action, reward) sample
+                policy.update(action, reward)
+
+        return {"rewards": rewards, "was_optimal": was_optimal}

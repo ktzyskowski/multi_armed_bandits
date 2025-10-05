@@ -1,63 +1,34 @@
+import json
 from multiprocessing import Pool
 
+import click
 import numpy as np
 import plotly.graph_objects as go
 
-from mab.testbed import Testbed, TestbedConfig
-
-N_ARMS = 10
-N_RUNS = 2_000
-N_STEPS = 1_000
-N_PROCESSES = 4
+from mab.testbed import Testbed
 
 
-def main():
-    experiments: list[TestbedConfig] = [
-        {
-            "name": "eps_greedy (eps=0.1)",
-            "type": "eps_greedy",
-            "stationary": True,
-            "args": {"eps": 0.1},
-        },
-        {
-            "name": "ucb (c=2)",
-            "type": "ucb",
-            "stationary": True,
-            "args": {"c": 2.0},
-        },
-        {
-            "name": "gradient (alpha=0.1)",
-            "type": "gradient",
-            "stationary": True,
-            "args": {"alpha": 0.1},
-        },
-        {
-            "name": "gradient (alpha=0.4)",
-            "type": "gradient",
-            "stationary": True,
-            "args": {"alpha": 0.4},
-        },
-        {
-            "name": "gradient (alpha=0.1, no-baseline)",
-            "type": "gradient",
-            "stationary": True,
-            "args": {"alpha": 0.1, "baseline": True},
-        },
-        {
-            "name": "gradient (alpha=0.4, no-baseline)",
-            "type": "gradient",
-            "stationary": True,
-            "args": {"alpha": 0.4, "baseline": True},
-        },
-    ]
+@click.command()
+@click.argument("filename")
+@click.option("-p", "--n-processes", default=4)
+def main(filename: str, n_processes: int):
+    with open(filename, "r") as f:
+        config = json.load(f)
 
-    testbed = Testbed(k=N_ARMS, n_runs=N_RUNS, n_steps=N_STEPS)
-    with Pool(processes=N_PROCESSES) as pool:
+    testbed = Testbed(
+        k=config.get("n_arms"),
+        n_runs=config.get("n_runs"),
+        n_steps=config.get("n_steps"),
+    )
+
+    experiments = config.get("experiments")
+    with Pool(processes=n_processes) as pool:
         results = pool.map(testbed.run, experiments)
 
+    # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
     # concatenate rewards from all experiments in 0th dim:
     # new dims = [n_experiments, n_runs, n_steps]
-    rewards = np.stack(results, axis=0)
+    rewards = np.stack([result["rewards"] for result in results], axis=0)
 
     # average across runs
     average_rewards = rewards.mean(axis=1)
