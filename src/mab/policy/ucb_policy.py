@@ -40,7 +40,7 @@ class UpperConfidenceBoundPolicy(Policy):
         action = np.argmax(self._q + self._c * np.sqrt(np.log(self._t) / self._n))
         return action
 
-    def update(self, action: int, reward: float):
+    def update(self, action: int, reward: float) -> None:
         self._t += 1
         self._n[action] += 1
         self._q[action] += (1 / self._n[action]) * (reward - self._q[action])

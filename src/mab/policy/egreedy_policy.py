@@ -42,12 +42,12 @@ class EpsilonGreedyPolicy(Policy):
             # select the greedy action
             return np.argmax(self._q)  # type: ignore
 
-    def _step_size(self, action):
+    def _step_size(self, action) -> float:
         if self._alpha:
             return self._alpha
         else:
             self._n[action] += 1
             return 1 / self._n[action]
 
-    def update(self, action: int, reward: float):
+    def update(self, action: int, reward: float) -> None:
         self._q[action] += self._step_size(action) * (reward - self._q[action])
