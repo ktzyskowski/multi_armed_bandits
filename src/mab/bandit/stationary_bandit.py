@@ -19,7 +19,7 @@ class MultiArmedBandit:
         """
         self._rng = np.random.default_rng(seed=random_seed)
         # sample true value q*(a) for each action: N(0, 1)
-        self._q = [self._rng.normal(0.0, 1.0) for _ in range(k)]
+        self._q = np.array([self._rng.normal(0.0, 1.0) for _ in range(k)])
 
     def actions(self) -> set[int]:
         return set(range(len(self._q)))

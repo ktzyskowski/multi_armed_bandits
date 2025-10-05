@@ -1,3 +1,3 @@
-from typing import Callable
+__all__ = ["Policy"]
 
-Policy = Callable[[], int]
+from .policy import Policy
