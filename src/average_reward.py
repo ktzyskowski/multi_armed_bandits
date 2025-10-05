@@ -6,9 +6,9 @@ import plotly.graph_objects as go
 
 from mab.bandit.nonstationary_bandit import NonstationaryMultiArmedBandit
 from mab.bandit.stationary_bandit import MultiArmedBandit
-from mab.policy.epsilon_greedy_policy import EpsilonGreedyPolicy
+from mab.policy.egreedy_policy import EpsilonGreedyPolicy
 from mab.policy.random_policy import RandomPolicy
-from mab.policy.upper_confidence_bound_policy import UpperConfidenceBoundPolicy
+from mab.policy.ucb_policy import UpperConfidenceBoundPolicy
 from mab.testbed import Testbed
 
 N_ARMS = 10

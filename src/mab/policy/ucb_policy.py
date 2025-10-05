@@ -6,7 +6,7 @@ from .policy import Policy
 
 
 class UpperConfidenceBoundPolicy(Policy):
-    """Epsilon greedy policy."""
+    """Upper confidence bound policy."""
 
     def __init__(
         self,
@@ -17,7 +17,7 @@ class UpperConfidenceBoundPolicy(Policy):
         """Initialize policy.
 
         Args:
-            eps (float): epsilon parameter.
+            c (float): exploration parameter.
             k (int): number of actions to pick from.
             random_seed (int, optional): random seed for reproducibility.
         """
