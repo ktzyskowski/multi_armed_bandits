@@ -1,15 +1,10 @@
 [project]
 name = "multi-armed-bandits"
-version = "0.1.0"
-description = "Add your description here"
+version = "1.0.0"
+description = "Pyton implementation of multi-armed bandit testbed from Sutton and Barto."
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = [
-    "click>=8.3.0",
-    "numpy>=2.3.3",
- "plotly>=4.0.0",
- "tqdm>=4.67.1",
-]
+dependencies = ["click>=8.3.0", "numpy>=2.3.3", "plotly>=4.0.0", "tqdm>=4.67.1"]
 
 [dependency-groups]
-dev = ["streamlit>=1.50.0"]
+dev = []
